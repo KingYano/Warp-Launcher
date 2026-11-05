@@ -19,9 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
--------------------------------------------------------------------------------
-Composants tiers, chacun sous sa propre licence (textes dans le dossier licences/) :
-- Polices Bricolage Grotesque et Figtree : SIL Open Font License 1.1
-- Microsoft.Web.WebView2.Core.dll, Microsoft.Web.WebView2.WinForms.dll,
-  WebView2Loader.dll : licence BSD de Microsoft (licences/Microsoft-WebView2.txt)
