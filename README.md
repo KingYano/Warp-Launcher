@@ -4,6 +4,8 @@ Un lanceur de jeux pour Windows : tes jeux PC et émulés dans une seule fenêtr
 
 Warp ne contient **aucun jeu, aucune clé, aucun firmware**. Il lance les programmes que tu as déjà installés.
 
+![Warp : la collection, le jeu sélectionné et une mise à jour d'émulateur disponible](docs/screenshots/accueil.png)
+
 ## Ce qu'il fait
 
 - **Ta collection** : un jeu par carte, avec son visuel. On ajoute, modifie ou retire un jeu depuis l'app.
@@ -14,6 +16,14 @@ Warp ne contient **aucun jeu, aucune clé, aucun firmware**. Il lance les progra
 - **Mises à jour d'émulateur depuis GitHub** : Warp suit les publications d'un dépôt, vérifie l'empreinte SHA-256 de l'archive, met l'ancienne version de côté et installe la nouvelle sans toucher au dossier `user` (clés, sauvegardes, réglages). Un bouton remet la version précédente.
 - **Fenêtre à refermer** : si un programme pose la même question à chaque démarrage, Warp peut la refermer pour toi (champ `dismiss`).
 - **Clavier et manette** : flèches et Entrée, ou croix/stick et A.
+
+## En images
+
+| Un jeu en cours | Mise à jour de l'émulateur | Ajouter ou modifier un jeu |
+|---|---|---|
+| ![Jeu en cours : le bouton devient « Revenir au jeu »](docs/screenshots/en-cours.png) | ![Fenêtre de mise à jour : version installée, dernière version et notes](docs/screenshots/mise-a-jour.png) | ![Fenêtre de modification : visuel, exécutable, options, dépôt GitHub](docs/screenshots/modifier.png) |
+
+Les jeux des captures sont inventés. Sans image, Warp génère un visuel coloré à partir du nom du jeu ; avec une image, elle sert de fond et de vignette.
 
 ## Installer
 
