@@ -1,0 +1,28 @@
+{
+  "games": [
+    {
+      "id": "exemple-pc",
+      "name": "Mon jeu PC",
+      "subtitle": "Natif PC",
+      "exe": "D:\\Jeux\\MonJeu\\jeu.exe",
+      "args": "--option",
+      "cwd": "D:\\Jeux\\MonJeu",
+      "env": {
+        "MA_VARIABLE": "valeur"
+      },
+      "image": "covers\\exemple-pc.jpg"
+    },
+    {
+      "id": "exemple-emule",
+      "name": "Mon jeu émulé",
+      "subtitle": "Via Eglantine",
+      "exe": "D:\\Emulateurs\\Eglantine\\eglantine.exe",
+      "args": "-g \"D:\\Jeux\\MonJeu\\base\\exefs\\main\"",
+      "dismiss": "Titre exact d'une fenêtre à refermer au démarrage",
+      "update": {
+        "repo": "ZendNevs/Eglantine-ZendNevs",
+        "channel": "versions"
+      }
+    }
+  ]
+}

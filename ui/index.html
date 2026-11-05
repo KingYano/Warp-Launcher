@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warp</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--
+  Warp : interface. Tout le contenu (jeux, statuts, temps de jeu) est rempli par app.js.
+  La barre du haut sert aussi de barre de titre : on déplace la fenêtre en la faisant glisser.
+-->
+<div class="app" id="app">
+
+  <header class="titlebar" id="titlebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <linearGradient id="brandGrad" x1=".12" y1=".08" x2=".88" y2=".96">
+            <stop offset="0" stop-color="#ffe9b8"/><stop offset=".36" stop-color="#ff8f4a"/><stop offset=".68" stop-color="#ff3f82"/><stop offset="1" stop-color="#7a4dff"/>
+          </linearGradient>
+        </defs>
+        <!-- anneau décentré : un portail vu de biais -->
+        <path fill="url(#brandGrad)" fill-rule="evenodd" d="M50 10a40 40 0 1 0 0 80a40 40 0 1 0 0-80ZM58 27a21 21 0 1 0 0 42a21 21 0 1 0 0-42Z"/>
+      </svg>
+      <span class="brand-name">warp</span>
+      <span class="preview-tag" id="previewTag" hidden>Aperçu</span>
+    </div>
+    <div class="titlebar-right">
+      <time class="clock" id="clock"></time>
+      <div class="win" id="winControls" hidden>
+        <button type="button" data-win="minimize" aria-label="Réduire">
+          <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M0 5.5h10" stroke="currentColor" fill="none"/></svg>
+        </button>
+        <button type="button" data-win="toggle" id="winToggle" aria-label="Agrandir">
+          <svg class="ico-max" viewBox="0 0 10 10" aria-hidden="true"><rect x=".5" y=".5" width="9" height="9" rx="1.2" stroke="currentColor" fill="none"/></svg>
+          <svg class="ico-restore" viewBox="0 0 10 10" aria-hidden="true"><rect x=".5" y="2.5" width="7" height="7" rx="1.2" stroke="currentColor" fill="none"/><path d="M2.5 2.5v-.8a1.2 1.2 0 0 1 1.2-1.2h4.6a1.2 1.2 0 0 1 1.2 1.2v4.6a1.2 1.2 0 0 1-1.2 1.2h-.8" stroke="currentColor" fill="none"/></svg>
+        </button>
+        <button type="button" data-win="close" class="win-close" aria-label="Fermer">
+          <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M.5.5l9 9M9.5.5l-9 9" stroke="currentColor" fill="none"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <div class="backdrop" aria-hidden="true">
+      <div class="layer" id="layerA"><div class="ambient"></div><div class="art"></div></div>
+      <div class="layer" id="layerB"><div class="ambient"></div><div class="art"></div></div>
+      <div class="veil"></div>
+    </div>
+
+    <section class="hero" id="hero" data-state="ready" aria-live="polite">
+      <p class="status" id="status"><i class="dot"></i><span id="statusText"></span></p>
+      <h1 id="title">&nbsp;</h1>
+      <p class="meta" id="meta"></p>
+      <div class="actions">
+        <button class="play" id="play" type="button">
+          <span class="play-icon" id="playIcon"></span><span id="playLabel">Jouer</span>
+        </button>
+        <div class="more-wrap" id="moreWrap">
+          <button class="round" id="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Options du jeu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="19" cy="12" r="1.9" fill="currentColor"/></svg>
+          </button>
+          <div class="menu" id="menu" role="menu" hidden>
+            <button type="button" role="menuitem" data-act="edit">Modifier…</button>
+            <button type="button" role="menuitem" data-act="folder">Ouvrir l'emplacement du jeu</button>
+            <button type="button" role="menuitem" data-act="update" id="menuUpdate" hidden>Mises à jour…</button>
+            <hr>
+            <button type="button" role="menuitem" data-act="remove" class="danger">Retirer de la collection</button>
+          </div>
+        </div>
+        <button class="update-pill" id="updatePill" type="button" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="updatePillText"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="shelf" aria-labelledby="shelfTitle">
+      <div class="shelf-head">
+        <h2 id="shelfTitle">Ta collection</h2>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="cards" id="cards" role="listbox" aria-label="Jeux"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="hints" id="hints"></div>
+    <div class="now" id="now" hidden>
+      <i class="dot"></i><span id="nowText"></span>
+      <button type="button" id="nowBack">Revenir au jeu</button>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+</div>
+
+<dialog class="sheet" id="editor" aria-labelledby="editorTitle">
+  <form id="editorForm" method="dialog" novalidate>
+    <header class="sheet-head">
+      <h2 id="editorTitle">Ajouter un jeu</h2>
+      <button type="button" class="sheet-close" id="editorClose" aria-label="Fermer">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </header>
+
+    <div class="sheet-body">
+      <div class="visual">
+        <div class="visual-preview art-fill" id="fPreview"></div>
+        <div class="visual-side">
+          <span class="label">Visuel</span>
+          <p class="help">Une image large (16:9) rend le mieux. Elle sert de fond et de vignette.</p>
+          <div class="row">
+            <button type="button" class="btn" id="fPickImage">Choisir une image…</button>
+            <button type="button" class="btn-link" id="fClearImage" hidden>Retirer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="fName">Nom</label>
+        <input id="fName" type="text" autocomplete="off" spellcheck="false" placeholder="Nom du jeu">
+      </div>
+
+      <div class="field">
+        <label class="label" for="fExe">Exécutable</label>
+        <div class="row">
+          <input id="fExe" type="text" autocomplete="off" spellcheck="false" placeholder="D:\Jeux\MonJeu\jeu.exe">
+          <button type="button" class="btn" id="fPickExe">Parcourir…</button>
+        </div>
+        <p class="help">Le jeu lui-même, ou l'émulateur s'il s'agit d'un jeu émulé.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="fArgs">Options de lancement <em>facultatif</em></label>
+        <input id="fArgs" type="text" autocomplete="off" spellcheck="false" placeholder='-g "D:\Jeux\MonJeu\exefs\main"'>
+        <p class="help">Avec Eglantine : <code>-g "chemin du jeu"</code> démarre directement dans le jeu, <code>-f</code> l'ouvre en plein écran.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="fSubtitle">Sous-titre <em>facultatif</em></label>
+        <input id="fSubtitle" type="text" autocomplete="off" spellcheck="false" placeholder="Via Eglantine">
+      </div>
+
+      <div class="field">
+        <label class="label" for="fRepo">Mises à jour de l'émulateur <em>facultatif</em></label>
+        <div class="row">
+          <input id="fRepo" type="text" autocomplete="off" spellcheck="false" placeholder="Lien GitHub, ex. github.com/Djihads80/Eglantine">
+          <select id="fChannel" aria-label="Versions à suivre">
+            <option value="versions">Versions</option>
+            <option value="builds">Tous les builds</option>
+          </select>
+        </div>
+        <p class="help">Le lanceur prévient quand une nouvelle version sort et l'installe en gardant le dossier <code>user</code> (clés, sauvegardes, réglages).</p>
+      </div>
+
+      <p class="form-error" id="fError" role="alert" hidden></p>
+    </div>
+
+    <footer class="sheet-foot">
+      <button type="button" class="btn ghost" id="editorCancel">Annuler</button>
+      <button type="submit" class="btn primary" id="editorSave">Ajouter</button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- Mises à jour de l'émulateur d'un jeu. Rempli par app.js. -->
+<dialog class="sheet updater" id="updater" aria-labelledby="upTitle">
+  <header class="sheet-head">
+    <h2 id="upTitle">Mises à jour</h2>
+    <button type="button" class="sheet-close" id="upClose" aria-label="Fermer">
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+    </button>
+  </header>
+  <div class="sheet-body">
+    <dl class="facts">
+      <div><dt>Installée</dt><dd id="upInstalled"></dd></div>
+      <div><dt>Dernière version</dt><dd id="upLatest"></dd></div>
+    </dl>
+    <div class="notes" id="upNotesBox" hidden>
+      <pre id="upNotes"></pre>
+      <button type="button" class="btn-link" id="upLink">Voir la page sur GitHub</button>
+    </div>
+    <div class="progress" id="upProgress" hidden>
+      <div class="track"><span id="upBar"></span></div>
+      <span id="upPhase"></span>
+    </div>
+    <p class="up-message" id="upMessage" role="status" hidden></p>
+    <p class="help" id="upSafe">Le dossier <code>user</code> (clés, firmware, sauvegardes, réglages) n'est pas touché. La version actuelle est mise de côté : tu pourras la remettre d'ici.</p>
+  </div>
+  <footer class="sheet-foot">
+    <button type="button" class="btn-link" id="upRestore" hidden></button>
+    <span class="spacer"></span>
+    <button type="button" class="btn ghost" id="upSecondary">Plus tard</button>
+    <button type="button" class="btn primary" id="upPrimary">Installer</button>
+  </footer>
+</dialog>
+
+<!-- Question oui / non (ex. : un autre jeu tourne déjà). Titre et texte remplis par app.js. -->
+<dialog class="sheet confirm" id="confirm" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+  <div class="sheet-body">
+    <h2 id="confirmTitle"></h2>
+    <p id="confirmText"></p>
+  </div>
+  <footer class="sheet-foot">
+    <button type="button" class="btn ghost" id="confirmYes">Lancer quand même</button>
+    <button type="button" class="btn primary" id="confirmNo">Annuler</button>
+  </footer>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

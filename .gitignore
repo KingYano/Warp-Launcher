@@ -1,0 +1,15 @@
+# Données personnelles : restent sur le PC, jamais dans le dépôt
+games.json
+games.illisible.json
+covers/
+data/
+erreur.log
+LISEZMOI.txt
+
+# Produits de compilation (le .exe est publié dans les « Releases » GitHub)
+Warp.exe
+src/mkicon.exe
+dist/
+
+# Fichiers temporaires
+*.tmp
